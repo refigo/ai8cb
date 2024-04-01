@@ -5,6 +5,11 @@ def toknize_gpt2(text):
 	tokenizer = GPT2TokenizerFast.from_pretrained("gpt2")
 	return tokenizer.encode(text)
 
+def detokenize_gpt2(tokenized):
+	from transformers import GPT2TokenizerFast
+	tokenizer = GPT2TokenizerFast.from_pretrained("gpt2")
+	return tokenizer.decode(tokenized)
+
 def download(url):
 	import requests
 	headers = {

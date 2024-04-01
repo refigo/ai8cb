@@ -1,10 +1,10 @@
 import os
 from openai import OpenAI
 import sys
-from common import download, get_text_from_html, toknize_gpt2, split_text
+from common import download, get_text_from_html, toknize_gpt2, detokenize_gpt2, split_text
 
-MAX_TOKENS = 4000
-MAX_NEW_TOKENS = 100
+MAX_TOKENS = 1024
+MAX_NEW_TOKENS = 400
 
 PREPROMPT = "SUMMARIZE THE FOLLOWING DOCUMENT IN KOREAN \n=====\n"
 POSTPROMPT = "\n=====\nSUMMARY:\n"
@@ -21,16 +21,29 @@ def openai_inference_gpt3_5_turbo(prompt: str, max_tokens: int = MAX_NEW_TOKENS)
 			# {"role": "system", "content": "You are a poetic assistant, skilled in explaining complex programming concepts with creative flair."},
 			{"role": "user", "content": prompt}
 		],
-		temperature=0.5,
+		temperature=0,
 		max_tokens=max_tokens
 	)
-	return response.choices[0].message
+	return response.choices[0].message.content
 
 def inference(prompt, max_tokens=MAX_NEW_TOKENS):
-	return openai_inference_gpt3_turbo(prompt, max_tokens)
+	return openai_inference_gpt3_5_turbo(prompt, max_tokens)
 
 def summarize(text):
-	prompt = "SUMMARIZE THE FOLLOWING DOCUMENT IN KOREAN \n=====\n" + text + "\n=====\nSUMMARY:\n"
+	tokenized = toknize_gpt2(text)
+	split = split_text(tokenized, TOKEN_BUDGET)
+
+	if len(split) > 1:
+		summaries = []
+		for i, chunk in enumerate(split):
+			decoded = detokenize_gpt2(chunk)
+			summaries.append(summarize(decoded))
+			print(i, summaries[-1])
+		summaries = " ".join(summaries)
+	else:
+		summaries = text
+	
+	prompt = PREPROMPT + summaries + POSTPROMPT
 	return inference(prompt)
 
 
@@ -38,14 +51,9 @@ url = sys.argv[1]
 html = download(url)
 text = get_text_from_html(html)
 
-tokenized = toknize_gpt2(text)
+summarized = summarize(text)
+print(summarized)
 
-split = split_text(tokenized, TOKEN_BUDGET)
+# result = copywrite(summarized)
 
-# result = summarize(text)
-
-print(split)
-
-print([len(x) for x in split])
-
-
+# print(result)
