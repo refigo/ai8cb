@@ -4,7 +4,7 @@ import sys
 from common import download, get_text_from_html, toknize_gpt2, detokenize_gpt2, split_text
 
 MAX_TOKENS = 1024
-MAX_NEW_TOKENS = 400
+MAX_NEW_TOKENS = 500
 
 PREPROMPT = "SUMMARIZE THE FOLLOWING DOCUMENT IN KOREAN \n=====\n"
 POSTPROMPT = "\n=====\nSUMMARY:\n"
@@ -62,8 +62,8 @@ def copywriter_openai_inference_gpt3_5_turbo(prompt: str, max_tokens: int = MAX_
 def copywriter_inference(prompt, max_tokens=MAX_NEW_TOKENS):
 	return copywriter_openai_inference_gpt3_5_turbo(prompt, max_tokens)
 
-def copywrite(text, url):
-	prompt = f"COPYWRITE THE FOLLOWING TEXT IN KOREAN IN OR AROUND THREE LINES SEPARATING WITH \'\n\' INFORMALLY AND PLEASE ADD THE \"이날의 게시글\n\n\" SENTENCE AT THE BEGINNING OF THE RESULT AND PLEASE ADD THE \"\n\n{url}\" SENTENCE AT THE VERY END OF THE RESULT\n=====\n" + text + "\n=====\n"
+def copywrite(text):
+	prompt = f"COPYWRITE THE FOLLOWING TEXT IN KOREAN IN OR AROUND THREE LINES VERY INFORMALLY AND PLEASE ADD A \"\n\"(NEWLINE CHARATER) END OF EACH LINES \n=====\n" + text + "\n=====\n"
 	print(prompt)
 	return copywriter_inference(prompt)
 
@@ -74,9 +74,8 @@ text = get_text_from_html(html)
 summarized = summarize(text)
 print(summarized)
 
-result = copywrite(summarized, url)
+copywrited = copywrite(summarized)
 
-# result = f"이날의 게시글\n\n{result}\n\n{url}"
-
+result = f"이날의 게시글\n\n{copywrited}\n\n{url}"
 
 print(result)
