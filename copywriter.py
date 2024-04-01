@@ -14,7 +14,7 @@ TOKEN_BUDGET = MAX_TOKENS - len(toknize_gpt2(PREPROMPT)) - len(toknize_gpt2(POST
 api_key = os.environ.get("OPENAI_API_KEY")
 client = OpenAI(api_key=api_key)
 
-def openai_inference_gpt3_5_turbo(prompt: str, max_tokens: int = MAX_NEW_TOKENS):
+def summarizer_openai_inference_gpt3_5_turbo(prompt: str, max_tokens: int = MAX_NEW_TOKENS):
 	response = client.chat.completions.create(
 		model="gpt-3.5-turbo",
 		messages=[
@@ -26,8 +26,8 @@ def openai_inference_gpt3_5_turbo(prompt: str, max_tokens: int = MAX_NEW_TOKENS)
 	)
 	return response.choices[0].message.content
 
-def inference(prompt, max_tokens=MAX_NEW_TOKENS):
-	return openai_inference_gpt3_5_turbo(prompt, max_tokens)
+def summarizer_inference(prompt, max_tokens=MAX_NEW_TOKENS):
+	return summarizer_openai_inference_gpt3_5_turbo(prompt, max_tokens)
 
 def summarize(text):
 	tokenized = toknize_gpt2(text)
@@ -44,8 +44,28 @@ def summarize(text):
 		summaries = text
 	
 	prompt = PREPROMPT + summaries + POSTPROMPT
-	return inference(prompt)
+	return summarizer_inference(prompt)
 
+
+def copywriter_openai_inference_gpt3_5_turbo(prompt: str, max_tokens: int = MAX_NEW_TOKENS):
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are an advanced copywriting assistant with expertise in creating compelling, persuasive, and engaging content tailored to a variety of target audiences. Your skills include adapting tone, style, and formality to match client needs, brainstorming catchy headlines, and generating creative content for marketing, advertising, and brand storytelling."},
+            {"role": "user", "content": prompt}
+        ],
+        temperature=0.5,
+        max_tokens=max_tokens
+    )
+    return response.choices[0].message.content
+
+def copywriter_inference(prompt, max_tokens=MAX_NEW_TOKENS):
+	return copywriter_openai_inference_gpt3_5_turbo(prompt, max_tokens)
+
+def copywrite(text, url):
+	prompt = f"COPYWRITE THE FOLLOWING TEXT IN KOREAN IN OR AROUND THREE LINES SEPARATING WITH \'\n\' INFORMALLY AND PLEASE ADD THE \"이날의 게시글\n\n\" SENTENCE AT THE BEGINNING OF THE RESULT AND PLEASE ADD THE \"\n\n{url}\" SENTENCE AT THE VERY END OF THE RESULT\n=====\n" + text + "\n=====\n"
+	print(prompt)
+	return copywriter_inference(prompt)
 
 url = sys.argv[1]
 html = download(url)
@@ -54,6 +74,9 @@ text = get_text_from_html(html)
 summarized = summarize(text)
 print(summarized)
 
-# result = copywrite(summarized)
+result = copywrite(summarized, url)
 
-# print(result)
+# result = f"이날의 게시글\n\n{result}\n\n{url}"
+
+
+print(result)
