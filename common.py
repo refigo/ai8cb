@@ -1,5 +1,3 @@
-
-# Use GPT2TokenizerFast to tokenize the text
 def toknize_gpt2(text):
 	from transformers import GPT2TokenizerFast
 	tokenizer = GPT2TokenizerFast.from_pretrained("gpt2")
