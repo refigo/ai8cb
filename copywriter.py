@@ -1,7 +1,9 @@
 import os
 from openai import OpenAI
 import sys
+from datetime import datetime
 from common import download, get_text_from_html, toknize_gpt2, detokenize_gpt2, split_text
+from github_ai8cb import create_github_issue_in_this_repo
 
 MAX_TOKENS = 1024
 MAX_NEW_TOKENS = 500
@@ -63,7 +65,7 @@ def copywriter_inference(prompt, max_tokens=MAX_NEW_TOKENS):
 	return copywriter_openai_inference_gpt3_5_turbo(prompt, max_tokens)
 
 def copywrite(text):
-	prompt = f"COPYWRITE THE FOLLOWING TEXT IN KOREAN IN OR AROUND THREE LINES VERY INFORMALLY AND PLEASE ADD A \"\n\"(NEWLINE CHARATER) END OF EACH LINES \n=====\n" + text + "\n=====\n"
+	prompt = f"COPYWRITE THE FOLLOWING TEXT IN KOREAN IN OR AROUND THREE LINES VERY INFORMALLY AND PLEASE ADD A \"\n\"(NEWLINE CHARATER) END OF EACH LINES \n=====\n" + text + "\n=====\nCOPYWRITING:\n"
 	print(prompt)
 	return copywriter_inference(prompt)
 
@@ -75,7 +77,9 @@ summarized = summarize(text)
 print(summarized)
 
 copywrited = copywrite(summarized)
-
 result = f"이날의 게시글\n\n{copywrited}\n\n{url}"
-
 print(result)
+
+todayDate = datetime.now().date()
+
+create_github_issue_in_this_repo(f"{todayDate} 이날의 게시글", result)
