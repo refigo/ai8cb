@@ -1,4 +1,3 @@
-
 def create_github_issue_in_this_repo(title, body):
 	import os
 	github_token = os.environ.get("GITHUB_TOKEN")
@@ -8,6 +7,7 @@ def create_github_issue_in_this_repo(title, body):
 	g = Github(auth=auth) # Public Web Github
 	repo = g.get_repo("refigo/ai8cb")
 	repo.create_issue(title=title, body=body)
+	print("Issue created in refigo/ai8cb")
 	g.close()
 
 def print_github_issues_in_this_repo():
