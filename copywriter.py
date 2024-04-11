@@ -4,6 +4,7 @@ import sys
 from datetime import datetime
 from common import download, get_text_from_html, toknize_gpt2, detokenize_gpt2, split_text
 from github_ai8cb import create_github_issue_in_this_repo
+from discord_ai8cb import send_message_to_discord_webhook
 
 MAX_TOKENS = 1024
 MAX_NEW_TOKENS = 500
@@ -56,7 +57,7 @@ def copywriter_openai_inference_gpt3_5_turbo(prompt: str, max_tokens: int = MAX_
             {"role": "system", "content": "You are an advanced copywriting assistant with expertise in creating compelling, persuasive, and engaging content tailored to a variety of target audiences. Your skills include adapting tone, style, and formality to match client needs, brainstorming catchy headlines, and generating creative content for marketing, advertising, and brand storytelling."},
             {"role": "user", "content": prompt}
         ],
-        temperature=0.5,
+        temperature=0.3,
         max_tokens=max_tokens
     )
     return response.choices[0].message.content
@@ -71,15 +72,16 @@ def copywrite(text):
 
 url = sys.argv[1]
 html = download(url)
-text = get_text_from_html(html)
+title, text = get_text_from_html(html)
 
 summarized = summarize(text)
 print(summarized)
 
 copywrited = copywrite(summarized)
-result = f"이날의 게시글\n\n{copywrited}\n\n{url}"
+result = f"이날의 게시글: [{title}]\n\n{copywrited}\n\n{url}"
 print(result)
 
 todayDate = datetime.now().date()
-
 create_github_issue_in_this_repo(f"{todayDate} 이날의 게시글", result)
+
+send_message_to_discord_webhook(result)
