@@ -20,7 +20,8 @@ def download(url):
 def get_text_from_html(html):
 	from bs4 import BeautifulSoup
 	soup = BeautifulSoup(html.text, 'html.parser')
-	return soup.get_text()
+	title = soup.find('title')
+	return title.get_text(), soup.get_text()
 
 def split_text(tokenized, budget):
 	split = []
