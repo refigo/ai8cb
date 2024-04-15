@@ -1,6 +1,6 @@
 # AI8CB (AI팔코봇)
 
-팔만코딩경(80000Coding)에 있는 게시글들에 대해서 '이날의 게시글' 이라는 소개글을 작성해서 게시해주는 AI봇
+[팔만코딩경(80000Coding)](https://80000coding.oopy.io/)에 있는 게시글들에 대해서 '이날의 게시글' 이라는 소개글을 작성해서 게시해주는 AI봇
 
 ![](/images/ai8cb-introducing-operation.png)
 - [원본 게시글](https://80000coding.oopy.io/d9470feb-e824-4077-bf17-02dd64d72b1c#d9470feb-e824-4077-bf17-02dd64d72b1c)
@@ -56,7 +56,7 @@ DISCORD_WEBHOOK_URL=
 
 ## 주요 기능 소개
 
-- Getting Text's Article
+- Getting text of an article
 - Summarizing
 - Copywriting
 - Posting
