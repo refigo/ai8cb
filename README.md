@@ -30,7 +30,7 @@ git clone https://github.com/refigo/ai8cb.git
 (venv-ai8cb) $ pip install -r requirements.txt
 ```
 
-- Setting environment value
+- Setting environment variable
 ```.env
 OPENAI_API_KEY=
 
@@ -71,8 +71,8 @@ DISCORD_WEBHOOK_URL=
 	- [x] Setting to use OpenAI
 - [x] Copywrite ✅ 2024-04-01
 	- [x] Prompt Engineering
-- [x] Github issue ✅ 2024-04-01
-- [x] Discord Webhook ✅ 2024-04-04
+- [x] Post to Slack with Github issue ✅ 2024-04-01
+- [x] Post to Discord using webhook ✅ 2024-04-04
 - [ ] Auto Link Selector
 - [ ] Automation Daily Execution
 - [ ] Fine Tuning
