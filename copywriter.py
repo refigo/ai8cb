@@ -5,6 +5,8 @@ from datetime import datetime
 from common import download, get_text_from_html, toknize_gpt2, detokenize_gpt2, split_text
 from github_ai8cb import create_github_issue_in_this_repo
 from discord_ai8cb import send_message_to_discord_webhook
+from dotenv import load_dotenv
+
 
 MAX_TOKENS = 1024
 MAX_NEW_TOKENS = 500
@@ -14,12 +16,18 @@ POSTPROMPT = "\n=====\nSUMMARY:\n"
 
 TOKEN_BUDGET = MAX_TOKENS - len(toknize_gpt2(PREPROMPT)) - len(toknize_gpt2(POSTPROMPT)) - MAX_NEW_TOKENS
 
+
+load_dotenv()
+
 api_key = os.environ.get("OPENAI_API_KEY")
+
 client = OpenAI(api_key=api_key)
+
 
 def summarizer_openai_inference_gpt3_5_turbo(prompt: str, max_tokens: int = MAX_NEW_TOKENS):
 	response = client.chat.completions.create(
 		model="gpt-3.5-turbo",
+		# model="gpt-4o-mini",
 		messages=[
 			# {"role": "system", "content": "You are a poetic assistant, skilled in explaining complex programming concepts with creative flair."},
 			{"role": "user", "content": prompt}
