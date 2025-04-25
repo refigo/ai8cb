@@ -16,8 +16,8 @@ distro==1.9.0
 filelock==3.13.3
 frozenlist==1.4.1
 fsspec==2024.3.1
-h11==0.14.0
-httpcore==1.0.5
+h11>=0.16.0
+httpcore==1.0.9
 httpx==0.27.0
 huggingface-hub==0.24.0
 idna==3.6
